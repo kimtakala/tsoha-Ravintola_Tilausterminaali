@@ -2,6 +2,7 @@ Ravintola Tilaus Terminaali
 
 Sovelluksen ominaisuudet:
 
+
 Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
 
 Käyttäjä voi poistaa tunnuksensa.
