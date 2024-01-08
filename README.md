@@ -1,0 +1,14 @@
+Ravintola Tilaus Terminaali
+
+Sovelluksen ominaisuudet:
+
+Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
+Käyttäjä voi poistaa tunnuksensa.
+Jokainen käyttäjä on peruskäyttäjä tai ylläpitäjä.
+Sovelluksessa näkyy ravintolan tilausvaihtoehdot, joista on saatavilla lisätietoa haluttaessa.
+Käyttäjä näkee ruokavaihtoehdot ryhmiteltynä kategorioihin ja voi painaa tilausvaihtoehdosta, jolloin siitä näytetään lisää tietoa (kuten kuvaus ja ravintosisältö).
+Käyttäjä voi järjestää ruokaesineitä kategorioiden sisäisesti hinta järjestykseen.
+Ylläpitäjä voi lisätä ja poistaa ruokia sekä määrittää ruoista näytettävät tiedot.
+Käyttäjä voi etsiä kaikki ruokaa, joiden kuvauksessa tai nimessä on annettu sana.
+Ylläpitäjä voi luoda kategorioita, joihin ruokia voi luokitella. Ruokaesine voi kuulua yhteen tai useampaan ryhmään.
+Käyttäjä voi tilata ruoan joko mukaan tai paikanpäällä syötäväksi, kun käyttäjä on tilannut, hän saa vuoro numeron ja arvioidun keston tilauksesta.
