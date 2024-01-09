@@ -1,32 +1,27 @@
-from flask import Flask, render_template, request
+from os import getenv
+from flask import Flask, redirect, render_template, request
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import text
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
+db = SQLAlchemy(app)
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    result = db.session.execute(text("SELECT content FROM messages"))
+    messages = result.fetchall()
+    return render_template("index.html", count=len(messages), messages=messages) 
 
-@app.route("/page/<int:id>")
-def page(id):
-    return render_template('page.html', id=str(id))
+@app.route("/new")
+def new():
+    return render_template("new.html")
 
-@app.route("/form")
-def form():
-    return render_template("form.html")
-
-@app.route("/result", methods=["POST"])
-def result():
-    return render_template("result.html", name=request.form["name"])
-
-@app.route("/order")
-def order():
-    return render_template("order.html")
-
-@app.route("/pizzaresult", methods=["POST"])
-def pizzaresult():
-    pizza = request.form["pizza"]
-    extras = request.form.getlist("extra")
-    message = request.form["message"]
-    return render_template("pizzaresult.html", pizza=pizza,
-                                          extras=extras,
-                                          message=message)
+@app.route("/send", methods=["POST"])
+def send():
+    content = request.form["content"]
+    sql = "INSERT INTO messages (content) VALUES (:content)"
+    db.session.execute(text(sql), {"content":content})
+    db.session.commit()
+    return redirect("/")

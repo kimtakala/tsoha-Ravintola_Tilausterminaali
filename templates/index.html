@@ -1,4 +1,7 @@
-<title>Etusivu</title>
-<h1>Etusivu</h1>
-<b>Tervetuloa</b> <i>sovellukseen</i>!
-<img src="/static/kumpula.webp">
+Viestien määrä: {{ count }}
+<hr>
+{% for message in messages %}
+{{ message.content }}
+<hr>
+{% endfor %}
+<a href="/new">Lähetä viesti</a>
