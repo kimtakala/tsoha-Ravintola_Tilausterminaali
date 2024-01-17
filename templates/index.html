@@ -1,7 +1,8 @@
-{% if session.username %}
-<p>Olet kirjautunut nimellä {{ session.username }}</p>
-<a href="/logout">Kirjaudu ulos</a>
-{% else %}
+{% if not session.username %}
+
+<h1>Tervetuloa MacKingiin!</h1>
+<h2>Mitä saisi olla?</h2>
+<h4>Kirjaudu sisään alla.</h4>
 <form action="/login" method="POST">
 <p>Tunnus:<br>
 <input type="text" name="username"></p>
@@ -9,4 +10,14 @@
 <input type="password" name="password"></p>
 <input type="submit" value="Kirjaudu">
 </form>
+
+{% else %}
+
+<h2>Hei {{ session.username }}, mitä tänään syötäisiin?</h2>
+<br>
+<h4>Tilaa valitsemalla, jokin alla olevista vaihtoehdoista :)</h4>
+<input type="button" value="1"><input type="button" value="2"><input type="button" value="3">
+<p>Voit myös kirjautua ulos alla olevasta näppäimestä.</p>
+<a href="/logout">Kirjaudu ulos</a>
+
 {% endif %}
