@@ -16,7 +16,7 @@ def index():
 @app.route("/login",methods=["POST"])
 def login():
     username = request.form["username"]
-    passwordtry = generate_password_hash(request.form["password"])
+    password = request.form["password"]
     sql = "SELECT id, passwordhash, admin FROM users WHERE username=:username AND removed != TRUE"
     result = db.session.execute(text(sql), {"username":username})
     user = result.fetchone()
@@ -24,16 +24,49 @@ def login():
         session['incorrect_values'] = True
     else:
         hash_value = user.passwordhash
-        if check_password_hash(hash_value, passwordtry):
-            session['logged in'] = True
+        if check_password_hash(hash_value, password):
+            session['logged_in'] = True
             session['admin'] = user.admin
         else:
-            session['incorrect values'] = True
+            session['incorrect_values'] = True
 
     session["username"] = username
     return redirect("/")
 
+@app.route("/register",methods=["POST"])
+def register():
+    username = request.form["username"]
+    password = generate_password_hash(request.form["password"])
+    session['admin'] = False
+    sql = "SELECT id FROM users WHERE username=:username"
+    result = db.session.execute(text(sql), {"username":username})
+
+    # Check existing user
+    if result.fetchone():
+        session['user_exists'] = True
+    else:
+        # Check admin password
+        if (admin_password := request.form['admin_password']):
+            admin_hash = getenv("ADMIN_PASSWORD")
+            if check_password_hash(admin_hash, admin_password):
+                session['admin'] = True
+            else:
+                session['incorrect_admin_password'] = True
+        else:
+            session['admin'] = False
+
+        # upload data
+        if not session['incorrect_admin_password']:
+            sql = "INSERT INTO users(admin:=admin, username:=username, passwordhash:=password)"
+            admin = session['admin']
+            result = db.session.execute(text(sql),{"admin":admin,
+                                                   "username":username, "passwordhash":password})
+            session.clear()
+            session['registeration_successful'] = True
+
+    return redirect("/")
+
 @app.route("/logout")
 def logout():
-    del session["username"]
+    session.clear()
     return redirect("/")
