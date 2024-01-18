@@ -2,22 +2,17 @@
 
     {% if session.incorrect_admin_password %}
         <h3 class="error">Väärä ylläpidon salasana, yritä uudelleen!</h3>
-        {% session.pop(incorrect_admin_password) %}
     {% elif session.incorrect_values %}
         <h3 class="error">Väärä käyttäjätunnus tai salasana, yritä uudelleen!</h3>
-        {% session.pop(incorrect_values) %}
     {% elif session.user_exists %}
         <h3 class="error">Käyttäjätunnus on jo olemassa, yritä uudelleen!</h3>
-        {% session.pop(user_exists) %}
     {% else %}
         {% if session.registeration_successful %}
             <h3>Rekisteröinti onnistui! Kirjaudu nyt sisään.</h3>
-            {% session.pop(registeration_successful) %}
         {% endif %}
     <h1>Tervetuloa MacKingiin!</h1>
     <h2>Mitä saisi olla?</h2>
     {% endif %}
-{% endif %}
 
 <h4>Kirjaudu sisään, tai luo käyttäjä alla.</h4>
 
@@ -47,7 +42,7 @@
     <input type="password" name="password" required></p>
     <p>Ylläpito salasana (täytä vain jos olet luomassa ylläpitäjä tiliä)</p>
     <input type="password" name="admin_password"/>
-    <input type="submit" value="Kirjaudu">
+    <input type="submit" value="Luo Käyttäjä">
 </form>
 <!-- /register -->
 

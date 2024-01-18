@@ -11,12 +11,13 @@ db = SQLAlchemy(app)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", session=session)
 
 @app.route("/login",methods=["POST"])
 def login():
     username = request.form["username"]
     password = request.form["password"]
+    session.clear()
     sql = "SELECT id, passwordhash, admin FROM users WHERE username=:username AND removed != TRUE"
     result = db.session.execute(text(sql), {"username":username})
     user = result.fetchone()
@@ -37,7 +38,8 @@ def login():
 def register():
     username = request.form["username"]
     password = generate_password_hash(request.form["password"])
-    session['admin'] = False
+    admin_password = request.form['admin_password']
+    session.clear()
     sql = "SELECT id FROM users WHERE username=:username"
     result = db.session.execute(text(sql), {"username":username})
 
@@ -46,11 +48,12 @@ def register():
         session['user_exists'] = True
     else:
         # Check admin password
-        if (admin_password := request.form['admin_password']):
+        if admin_password:
             admin_hash = getenv("ADMIN_PASSWORD")
             if check_password_hash(admin_hash, admin_password):
                 session['admin'] = True
             else:
+                session['admin'] = False
                 session['incorrect_admin_password'] = True
         else:
             session['admin'] = False
@@ -61,7 +64,6 @@ def register():
             admin = session['admin']
             result = db.session.execute(text(sql),{"admin":admin,
                                                    "username":username, "passwordhash":password})
-            session.clear()
             session['registeration_successful'] = True
 
     return redirect("/")
