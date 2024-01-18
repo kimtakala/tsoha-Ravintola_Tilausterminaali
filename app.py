@@ -60,10 +60,12 @@ def register():
 
         # upload data
         if not session['incorrect_admin_password']:
-            sql = "INSERT INTO users(admin:=admin, username:=username, passwordhash:=password)"
+            sql = 'INSERT INTO users (admin, username, passwordhash) VALUES'\
+                  ' (:admin, :username, :password)'
             admin = session['admin']
             result = db.session.execute(text(sql),{"admin":admin,
                                                    "username":username, "passwordhash":password})
+            db.session.commit()
             session['registeration_successful'] = True
 
     return redirect("/")
