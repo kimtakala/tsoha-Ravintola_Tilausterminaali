@@ -1,22 +1,23 @@
 {% if not session.username %}
 
     {% if session.incorrect_admin_password %}
-    <h3 class="error">Väärä ylläpidon salasana, yritä uudelleen!</h3>
-    {% session.pop(incorrect_admin_password) %}
+        <h3 class="error">Väärä ylläpidon salasana, yritä uudelleen!</h3>
+        {% session.pop(incorrect_admin_password) %}
     {% elif session.incorrect_values %}
-    <h3 class="error">Väärä käyttäjätunnus tai salasana, yritä uudelleen!</h3>
-    {% session.pop(incorrect_values) %}
+        <h3 class="error">Väärä käyttäjätunnus tai salasana, yritä uudelleen!</h3>
+        {% session.pop(incorrect_values) %}
     {% elif session.user_exists %}
-    <h3 class="error">Käyttäjätunnus on jo olemassa, yritä uudelleen!</h3>
-    {% session.pop(user_exists) %}
+        <h3 class="error">Käyttäjätunnus on jo olemassa, yritä uudelleen!</h3>
+        {% session.pop(user_exists) %}
     {% else %}
         {% if session.registeration_successful %}
-        <h3>Rekisteröinti onnistui! Kirjaudu nyt sisään.</h3>
-        {% session.pop(registeration_successful) %}
+            <h3>Rekisteröinti onnistui! Kirjaudu nyt sisään.</h3>
+            {% session.pop(registeration_successful) %}
         {% endif %}
     <h1>Tervetuloa MacKingiin!</h1>
     <h2>Mitä saisi olla?</h2>
     {% endif %}
+{% endif %}
 
 <h4>Kirjaudu sisään, tai luo käyttäjä alla.</h4>
 
