@@ -1,17 +1,22 @@
 {% if not session.username %}
 
-<h1>Tervetuloa MacKingiin!</h1>
-<h2>Mitä saisi olla?</h2>
+    {% if session.incorrect_values %}
+    <h3 class="error">Väärä käyttäjätunnus tai salasana, yritä uudelleen!</h3>
+    {% else %}
+    <h1>Tervetuloa MacKingiin!</h1>
+    <h2>Mitä saisi olla?</h2>
+    {% endif %}
+
 <h4>Kirjaudu sisään alla.</h4>
 <form action="/login" method="POST">
 <p>Tunnus:<br>
-<input type="text" name="username"></p>
+<input type="text" name="username" required></p>
 <p>Salasana:<br>
-<input type="password" name="password"></p>
+<input type="password" name="password" required></p>
 <input type="submit" value="Kirjaudu">
 </form>
 
-{% else %}
+{% elif session.logged in and not session.admin %}
 
 <h2>Hei {{ session.username }}, mitä tänään syötäisiin?</h2>
 <br>
