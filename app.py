@@ -1,3 +1,4 @@
+'''This is the app.py module, it handels application logic for the web appication.'''
 from os import getenv
 from flask import Flask, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
@@ -11,17 +12,22 @@ db = SQLAlchemy(app)
 
 @app.route("/")
 def index():
+    '''Function for index page.'''
     return render_template("index.html", session=session)
 
 @app.route("/login",methods=["POST"])
 def login():
+    '''Function for logging in.'''
     username = request.form["username"]
     password = request.form["password"]
-    session.clear()
     sql = "SELECT id, passwordhash, admin FROM users WHERE username=:username AND removed != TRUE"
     result = db.session.execute(text(sql), {"username":username})
     user = result.fetchone()
+    session.clear()
     if not user:
+        print('user not found')
+        print(f'{user = }')
+        print(f'{result = }')
         session['incorrect_values'] = True
     else:
         hash_value = user.passwordhash
@@ -30,15 +36,25 @@ def login():
             session['admin'] = user.admin
             session["username"] = username
         else:
+            print('password not matched')
             session['incorrect_values'] = True
-    
     return redirect("/")
+
+@app.route("/registration",methods=['POST', 'GET'])
+def registration():
+    '''Function for registration page.'''
+    return render_template("registration.html", session=session)
+
+    #TODO need to add check for not logged in
+    #? return redirect("/")
 
 @app.route("/register",methods=["POST"])
 def register():
+    '''Function for registration.'''
     username = request.form["username"]
     password = generate_password_hash(request.form["password"])
     admin_password = request.form['admin_password']
+    empty_password = generate_password_hash("")
     session.clear()
     sql = "SELECT id FROM users WHERE username=:username"
     result = db.session.execute(text(sql), {"username":username})
@@ -48,7 +64,7 @@ def register():
         session['user_exists'] = True
     else:
         # Check admin password
-        if admin_password:
+        if not check_password_hash(empty_password, admin_password):
             admin_hash = getenv("ADMIN_PASSWORD")
             if check_password_hash(admin_hash, admin_password):
                 session['admin'] = True
@@ -59,18 +75,20 @@ def register():
             session['admin'] = False
 
         # upload data
-        if not session['incorrect_admin_password']:
+        if not session.get('incorrect_admin_password'):
             sql = 'INSERT INTO users (admin, username, passwordhash) VALUES'\
                   ' (:admin, :username, :password)'
             admin = session['admin']
             result = db.session.execute(text(sql),{"admin":admin,
-                                                   "username":username, "passwordhash":password})
+                                                   "username":username, "password":password})
             db.session.commit()
-            session['registeration_successful'] = True
+            session['registration_successful'] = True
+            return redirect("/")
 
-    return redirect("/")
+    return redirect("/registration")
 
 @app.route("/logout")
 def logout():
+    '''Function for logging out.'''
     session.clear()
     return redirect("/")
