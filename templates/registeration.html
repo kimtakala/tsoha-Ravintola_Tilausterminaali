@@ -1,0 +1,19 @@
+{% if session.incorrect_admin_password %}
+    <h4 class="error">Väärä ylläpidon salasana, yritä uudelleen!</h4>
+{% elif session.user_exists %}
+    <h4 class="error">Käyttäjätunnus on jo olemassa, yritä uudelleen!</h4>
+{% endif %}
+
+<h2>Luo käyttäjätunnus alla!</h2>
+
+<!-- register section -->
+<form action="/register" method="POST">
+    <p>Tunnus:<br>
+    <input type="text" name="username" required></p>
+    <p>Salasana:<br>
+    <input type="password" name="password" required></p>
+    <p>Ylläpito salasana (täytä vain jos olet luomassa ylläpitäjä tiliä)</p>
+    <input type="password" name="admin_password"/>
+    <input type="submit" value="Luo Käyttäjä">
+</form>
+<!-- /register -->
