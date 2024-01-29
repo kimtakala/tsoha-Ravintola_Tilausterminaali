@@ -28,10 +28,10 @@ def login():
         if check_password_hash(hash_value, password):
             session['logged_in'] = True
             session['admin'] = user.admin
+            session["username"] = username
         else:
             session['incorrect_values'] = True
-
-    session["username"] = username
+    
     return redirect("/")
 
 @app.route("/register",methods=["POST"])
