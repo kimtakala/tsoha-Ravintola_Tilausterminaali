@@ -1,58 +1,40 @@
 {% if not session.username %}
 
-    {% if session.incorrect_admin_password %}
-        <h3 class="error">Väärä ylläpidon salasana, yritä uudelleen!</h3>
-    {% elif session.incorrect_values %}
+    {% if session.incorrect_values %}
         <h3 class="error">Väärä käyttäjätunnus tai salasana, yritä uudelleen!</h3>
-    {% elif session.user_exists %}
-        <h3 class="error">Käyttäjätunnus on jo olemassa, yritä uudelleen!</h3>
-    {% else %}
-        {% if session.registeration_successful %}
-            <h3>Rekisteröinti onnistui! Kirjaudu nyt sisään.</h3>
-        {% endif %}
-    <h1>Tervetuloa MacKingiin!</h1>
-    <h2>Mitä saisi olla?</h2>
+    {% elif session.registration_successful %}
+        <h3>Rekisteröinti onnistui! Kirjaudu nyt sisään.</h3>
     {% endif %}
 
-<h4>Kirjaudu sisään, tai luo käyttäjä alla.</h4>
+    <h1>Tervetuloa MacKingiin!</h1>
+    <h2>Mitä saisi olla?</h2>
 
-<p>Haluan:</p>
-<label>
-<input type="radio" name="login" value="kirjautua sisään" checked/>
-</label>
-<label>
-<input type="radio" name="register" value="luoda käyttäjän"/>
-</label>
+    <h4>Kirjaudu sisään alla, tai paina "Luo Käyttäjä"</h4>
 
-<!-- login section -->
-<form action="/login" method="POST" data-show-if="login">
-    <p>Tunnus:<br>
-    <input type="text" name="username" required></p>
-    <p>Salasana:<br>
-    <input type="password" name="password" required></p>
-    <input type="submit" value="Kirjaudu">
-</form>
-<!-- /login -->
+    <!-- login section -->
+    <form action="/login" method="POST">
+        <p>Tunnus:<br>
+        <input type="text" name="username" required></p>
+        <p>Salasana:<br>
+        <input type="password" name="password" required></p>
+        <input type="submit" value="Kirjaudu">
+    </form>
+    <!-- /login -->
 
-<!-- register section -->
-<form action="/register" method="POST" data-show-if="register">
-    <p>Tunnus:<br>
-    <input type="text" name="username" required></p>
-    <p>Salasana:<br>
-    <input type="password" name="password" required></p>
-    <p>Ylläpito salasana (täytä vain jos olet luomassa ylläpitäjä tiliä)</p>
-    <input type="password" name="admin_password"/>
-    <input type="submit" value="Luo Käyttäjä">
-</form>
-<!-- /register -->
+    <!-- registration -->
+    <form action="/registration" method="POST">
+        <input type="submit" value="Luo Käyttäjä"/>
+    </form>
+    <!-- /registration -->
+
 
 {% elif session.logged_in and not session.admin %}
 
-<h2>Hei {{ session.username }}, mitä tänään syötäisiin?</h2>
-<br>
-<h4>Tilaa valitsemalla, jokin alla olevista vaihtoehdoista :)</h4>
-<input type="button" value="1"><input type="button" value="2"><input type="button" value="3">
-<p>Voit myös kirjautua ulos alla olevasta näppäimestä.</p>
-<a href="/logout">Kirjaudu ulos</a>
+    <h2>Hei {{ session.username }}, mitä tänään syötäisiin?</h2>
+    <br>
+    <h4>Tilaa valitsemalla, jokin alla olevista vaihtoehdoista :)</h4>
+    <input type="button" value="1"><input type="button" value="2"><input type="button" value="3">
+    <p>Voit myös kirjautua ulos alla olevasta näppäimestä.</p>
+    <a href="/logout">Kirjaudu ulos</a>
 
 {% endif %}
