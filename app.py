@@ -87,17 +87,17 @@ def mainmenu():
     '''Function for menu page.'''
     return render_template("mainmenu.html", session=session)
 
-@app.route("/menu/food",methods=['GET'])
+@app.route("/menu/food",methods=['POST'])
 def foodmenu():
     '''Function for menu page.'''
     return render_template("menu.html", session=session)
 
-@app.route("/menu/snacks",methods=['GET'])
+@app.route("/menu/snacks",methods=['POST'])
 def snacksmenu():
     '''Function for menu page.'''
     return render_template("menu.html", session=session)
 
-@app.route("/menu/drinks",methods=['GET'])
+@app.route("/menu/drinks",methods=['POST'])
 def drinksmenu():
     '''Function for menu page.'''
     return render_template("menu.html", session=session)
