@@ -38,3 +38,8 @@ suunnitelma ohjelman toteutuksesta:
 5. viimeistely ja mahd. muutokset.
 6. testaaminen
 7. loppusilaukset
+
+
+Missä vaiheessa projekti on 6.2.24?
+Projektin pohja on toimiva ja tästä on selkeä suunta eteenpäin. Nyt toimii kirjautuminen, käyttäjän luonti ja admin tila, seuraavaksi luon ikkunan josta tilata ruokaa ja admin tilassa lisätään sinne ruoka esineitä.
+Projektia voi testata tuotannossa luomalla käyttäjiä ja kirjautumalla niille sisään, voi myös yrittää luoda käyttäjän joka on jo olemassa ja voi myös luoda admin käyttäjän. Nämä tapaukset ja muutama muu vastaava toimii odotetusti.
