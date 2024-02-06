@@ -20,23 +20,19 @@ def login():
     '''Function for logging in.'''
     username = request.form["username"]
     password = request.form["password"]
-    sql = "SELECT id, passwordhash, admin FROM users WHERE username=:username AND removed != TRUE"
-    result = db.session.execute(text(sql), {"username":username})
-    user = result.fetchone()
+    sql = 'SELECT id, admin, username, passwordhash FROM users WHERE username=:username'\
+        ' AND removed IS NOT TRUE'
+    result = db.session.execute(text(sql), {"username":username}).fetchone()
     session.clear()
-    if not user:
-        print('user not found')
-        print(f'{user = }')
-        print(f'{result = }')
+    if not result:
         session['incorrect_values'] = True
     else:
-        hash_value = user.passwordhash
+        hash_value = result.passwordhash
         if check_password_hash(hash_value, password):
             session['logged_in'] = True
-            session['admin'] = user.admin
+            session['admin'] = result.admin
             session["username"] = username
         else:
-            print('password not matched')
             session['incorrect_values'] = True
     return redirect("/")
 
@@ -45,7 +41,7 @@ def registration():
     '''Function for registration page.'''
     return render_template("registration.html", session=session)
 
-    #TODO need to add check for not logged in
+    #! need to add check for not logged in
     #? return redirect("/")
 
 @app.route("/register",methods=["POST"])

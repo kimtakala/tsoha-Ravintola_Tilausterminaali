@@ -32,7 +32,16 @@
 
     <h2>Hei {{ session.username }}, mitä tänään syötäisiin?</h2>
     <br>
-    <h4>Tilaa valitsemalla, jokin alla olevista vaihtoehdoista :)</h4>
+    <h4>Tilaa valitsemalla jokin alla olevista vaihtoehdoista :)</h4>
+    <input type="button" value="1"><input type="button" value="2"><input type="button" value="3">
+    <p>Voit myös kirjautua ulos alla olevasta näppäimestä.</p>
+    <a href="/logout">Kirjaudu ulos</a>
+
+
+{% elif session.logged_in and session.admin %}
+
+    <h2>Hei {{ session.username }} Tee muutoksia järjestelmään alla</h2>
+    <br>
     <input type="button" value="1"><input type="button" value="2"><input type="button" value="3">
     <p>Voit myös kirjautua ulos alla olevasta näppäimestä.</p>
     <a href="/logout">Kirjaudu ulos</a>
