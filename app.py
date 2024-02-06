@@ -42,7 +42,6 @@ def registration():
     return render_template("registration.html", session=session)
 
     #! need to add check for not logged in
-    #? return redirect("/")
 
 @app.route("/register",methods=["POST"])
 def register():
@@ -82,6 +81,26 @@ def register():
             return redirect("/")
 
     return redirect("/registration")
+
+@app.route("/menu",methods=['POST'])
+def mainmenu():
+    '''Function for menu page.'''
+    return render_template("mainmenu.html", session=session)
+
+@app.route("/menu/food",methods=['GET'])
+def foodmenu():
+    '''Function for menu page.'''
+    return render_template("menu.html", session=session)
+
+@app.route("/menu/snacks",methods=['GET'])
+def snacksmenu():
+    '''Function for menu page.'''
+    return render_template("menu.html", session=session)
+
+@app.route("/menu/drinks",methods=['GET'])
+def drinksmenu():
+    '''Function for menu page.'''
+    return render_template("menu.html", session=session)
 
 @app.route("/logout")
 def logout():
