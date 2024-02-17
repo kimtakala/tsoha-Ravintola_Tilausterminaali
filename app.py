@@ -90,16 +90,19 @@ def mainmenu():
 @app.route("/menu/food",methods=['POST'])
 def foodmenu():
     '''Function for menu page.'''
+    session['menu_type'] = 'food'
     return render_template("menu.html", session=session)
 
 @app.route("/menu/snacks",methods=['POST'])
 def snacksmenu():
     '''Function for menu page.'''
+    session['menu_type'] = 'snacks'
     return render_template("menu.html", session=session)
 
 @app.route("/menu/drinks",methods=['POST'])
 def drinksmenu():
     '''Function for menu page.'''
+    session['menu_type'] = 'drinks'
     return render_template("menu.html", session=session)
 
 @app.route("/logout")
