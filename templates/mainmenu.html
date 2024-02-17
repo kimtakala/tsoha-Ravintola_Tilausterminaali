@@ -1,20 +1,33 @@
-<h2>Mitä saisi olla?</h2>
-
-<p>Valitse vaihtoehdoista:<br>
-<!-- foodmenu section -->
-<form action="/menu/food" method="POST">
-    <input type="submit" value="Ruokavalikko"></p>
-</form>
-<!-- /foodmenu -->
-
-<!-- snacksmenu section -->
-<form action="/menu/snacks" method="POST">
-    <input type="submit" value="Snacksvalikko"></p>
-</form>
-<!-- /snacksmenu -->
-
-<!-- drinksmenu section -->
-<form action="/menu/drinks" method="POST">
-    <input type="submit" value="Juomavalikko"></p>
-</form>
-<!-- /drinksmenu -->
+{% extends "layout.html" %}
+{% block title %}Päävalikko{% endblock %}
+{% block content %}
+  {% if session.logged_in %}
+    {% if not session.admin %}
+        <h2>Mitä saisi olla?</h2>
+    {% elif session.admin %}
+        <h2>Mihin kategoriaan haluat lisätä ruoka esineen?</h2>
+    {% endif %}
+    
+    <p>Valitse vaihtoehdoista:<br>
+    
+    <!-- foodmenu section -->
+    <form action="/menu/food" method="POST">
+        <input type="submit" value="Ruokavalikko"></p>
+    </form>
+    <!-- /foodmenu -->
+    
+    <!-- snacksmenu section -->
+    <form action="/menu/snacks" method="POST">
+        <input type="submit" value="Snacksvalikko"></p>
+    </form>
+    <!-- /snacksmenu -->
+    
+    <!-- drinksmenu section -->
+    <form action="/menu/drinks" method="POST">
+        <input type="submit" value="Juomavalikko"></p>
+    </form>
+    <!-- /drinksmenu -->
+  {% else %}
+    <h2 class="error">Ette ole kirjautunut sisään, palaa etusivulle yläpalkista.</h2>
+  {% endif %}
+{% endblock %}
