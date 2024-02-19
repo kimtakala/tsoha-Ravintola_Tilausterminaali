@@ -119,9 +119,10 @@ def selectionmenu():
 @app.route("/editor",methods=['POST'])
 def editor():
     '''Function for admin editor page.'''
-    sql = 'SELECT * FROM food WHERE removed IS NOT true'\
+    sql = 'SELECT * FROM food'\
     ' LEFT JOIN food_in_category as f_i_c'\
     ' ON food.id = f_i_c.food_id'\
+    ' WHERE removed IS NOT true'\
     ' ORDER BY f_i_c.category_id, food.name'
     results = db.session.execute(text(sql)).fetchall()
     return render_template("editor.html", session=session, results=results)
