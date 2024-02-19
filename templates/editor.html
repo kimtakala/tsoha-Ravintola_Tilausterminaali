@@ -1,20 +1,81 @@
 {% extends "layout.html" %}
 {% block title %}Ylläpito{% endblock %}
 {% block content %}
+
 {% if session.admin %}
-  <h2>Kaikki ruokaesineet:</h2>
-  <div class="container text-center">
+
+<h2>Kaikki tuotteet:</h2>
+
+<div class="container text-center">
     {% for result in results: %}
-      <div class="row">
+    <div class="row">
         {% for attribute in result.values() %}
         <div class="col">
-          {{ attribute }}
+            {{ attribute }}
         </div>
         {% endfor %}
-      </div>
+    </div>
     {% endfor %}
-  </div>
+</div>
+
+<br>
+
+<h2>Lisää tuotteita menuun alla:</h2>
+
+<!-- add_food section -->
+<div class="container-sm">
+    <form action="/add_food_item" method="POST">
+
+        <label>Valitse tuotteen tyyppi:
+            <div id="food_type" class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="type_selection" id="food_type_food"
+                        checked>
+                    <label class="form-check-label" for="food_type_food">
+                        Ruoka
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="type_selection"
+                        id="food_type_snacks">
+                    <label class="form-check-label" for="food_type_snacks">
+                        Snack
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="type_selection"
+                        id="food_type_drinks">
+                    <label class="form-check-label" for="food_type_drinks">
+                        Juoma
+                    </label>
+                </div>
+            </div>
+        </label>
+
+        <div class="col-5 mb-3">
+            <label for="item_name" class="form-label">Ruokaesineen nimi:</label>
+            <input type="text" class="form-control" id="item_name"
+                aria-describedby="item_name_help">
+            <div id="item_name_help" class="form-text">Kirjoita se lyhyesti ja ytimekkäästi.
+                Esim."Juustowapper"</div>
+        </div>
+
+        <div class="col-5">
+            <label for="item_price">Tuotteen hinta:</label>
+            <div class="input-group" id="item_price">
+                <input type="text" class="form-control" aria-describedby="item_price_help">
+                <span class="input-group-text">€</span>
+            </div>
+            <div id="item_price_help" class="form-text">Kirjoita tuotteen hinta käyttäen pilkkua.
+                Esim: 12,95</div>
+        </div>
+
+    </form>
+</div>
+
 {% else %}
-  <h2 class="error">Ei käyttöoikeuksia, palaa etusivulle yläpalkista.</h2>
+
+<h2 class="error">Ei käyttöoikeuksia, palaa etusivulle yläpalkista.</h2>
+
 {% endif %}
 {% endblock %}
