@@ -90,31 +90,15 @@ def mainmenu():
 def selectionmenu():
     'Function for menu page.'
     menu_type = request.form["menu_type"]
-    if menu_type == 'food':
-        sql = 'SELECT * FROM food'\
-        ' INNER JOIN food_in_category AS f_i_c'\
-        ' ON food.id = f_i_c.food_id'\
-        ' INNER JOIN categories AS cat'\
-        ' ON f_i_c.category_id = cat.id'\
-        ' WHERE cat.name = :menu_type'
-        items = db.session.execute(text(sql), {"menu_type":menu_type}).fetchall()
-        if session['admin']:
-            pass
-        else:
-            pass
+    sql = 'SELECT * FROM food'\
+    ' INNER JOIN food_in_category AS f_i_c'\
+    ' ON food.id = f_i_c.food_id'\
+    ' INNER JOIN categories AS cat'\
+    ' ON f_i_c.category_id = cat.id'\
+    ' WHERE cat.name = :menu_type'
+    results = db.session.execute(text(sql), {"menu_type":menu_type}).fetchall()
 
-    elif menu_type == 'Snacksvalikko':
-        if session['admin']:
-            pass
-        else:
-            pass
-
-    elif menu_type == 'Juomavalikko':
-        if session['admin']:
-            pass
-        else:
-            pass
-    return render_template("menu.html", session=session)
+    return render_template("menu.html", session=session, results=results)
 
 @app.route("/editor",methods=['POST'])
 def editor():
