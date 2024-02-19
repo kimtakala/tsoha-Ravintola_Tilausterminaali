@@ -49,7 +49,6 @@ def register():
     username = request.form["username"]
     password = generate_password_hash(request.form["password"])
     admin_password = request.form['admin_password']
-    empty_password = generate_password_hash("")
     session.clear()
     sql = "SELECT id FROM users WHERE username=:username"
     result = db.session.execute(text(sql), {"username":username})
@@ -59,7 +58,7 @@ def register():
         session['user_exists'] = True
     else:
         # Check admin password
-        if not check_password_hash(empty_password, admin_password):
+        if admin_password != "":
             admin_hash = getenv("ADMIN_PASSWORD")
             if check_password_hash(admin_hash, admin_password):
                 session['admin'] = True
@@ -91,7 +90,7 @@ def mainmenu():
 def selectionmenu():
     'Function for menu page.'
     menu_type = request.form["menu_type"]
-    if menu_type == 'Ruokavalikko':
+    if menu_type == 'food':
         sql = 'SELECT * FROM food'\
         ' INNER JOIN food_in_category AS f_i_c'\
         ' ON food.id = f_i_c.food_id'\
@@ -115,8 +114,17 @@ def selectionmenu():
             pass
         else:
             pass
-
     return render_template("menu.html", session=session)
+
+@app.route("/editor",methods=['POST'])
+def editor():
+    '''Function for admin editor page.'''
+    sql = 'SELECT * FROM food WHERE removed IS NOT true'\
+    ' LEFT JOIN food_in_category as f_i_c'\
+    ' ON food.id = f_i_c.food_id'\
+    ' ORDER BY f_i_c.category_id, food.name'
+    results = db.session.execute(text(sql)).fetchall()
+    return render_template("editor.html", session=session, results=results)
 
 @app.route("/logout")
 def logout():
