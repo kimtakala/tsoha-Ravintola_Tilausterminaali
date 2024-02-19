@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 {% block title %}Ruokavalikko{% endblock %}
 {% block content %}
-ens kerral täst sellanen ett tää huomio cookiesseist sen ett minkä tyyppinen menu on ja sen mukaa tekee sql kutsut
+  {% if session.menu_type == 'food' %}
+  {% elif session.menu_type == 'snacks' %}
+  {% elif session.menu_type == 'drinks' %}
+  {% endif %}
 {% endblock %}
