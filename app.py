@@ -87,22 +87,35 @@ def mainmenu():
     '''Function for menu page.'''
     return render_template("mainmenu.html", session=session)
 
-@app.route("/menu/food",methods=['POST'])
-def foodmenu():
-    '''Function for menu page.'''
-    session['menu_type'] = 'food'
-    return render_template("menu.html", session=session)
+@app.route("/menu/selection",methods=['POST'])
+def selectionmenu():
+    'Function for menu page.'
+    menu_type = request.form["menu_type"]
+    if menu_type == 'Ruokavalikko':
+        sql = 'SELECT * FROM food'\
+        ' INNER JOIN food_in_category AS f_i_c'\
+        ' ON food.id = f_i_c.food_id'\
+        ' INNER JOIN categories AS cat'\
+        ' ON f_i_c.category_id = cat.id'\
+        ' WHERE cat.name = :menu_type'
+        items = db.session.execute(text(sql), {"menu_type":menu_type}).fetchall()
+        if session['admin']:
+            pass
+        else:
+            pass
 
-@app.route("/menu/snacks",methods=['POST'])
-def snacksmenu():
-    '''Function for menu page.'''
-    session['menu_type'] = 'snacks'
-    return render_template("menu.html", session=session)
+    elif menu_type == 'Snacksvalikko':
+        if session['admin']:
+            pass
+        else:
+            pass
 
-@app.route("/menu/drinks",methods=['POST'])
-def drinksmenu():
-    '''Function for menu page.'''
-    session['menu_type'] = 'drinks'
+    elif menu_type == 'Juomavalikko':
+        if session['admin']:
+            pass
+        else:
+            pass
+
     return render_template("menu.html", session=session)
 
 @app.route("/logout")
