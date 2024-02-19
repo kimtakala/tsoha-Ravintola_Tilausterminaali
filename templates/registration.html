@@ -1,3 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}Rekisteröinti{% endblock %}
+{% block content %}
 {% if session.incorrect_admin_password %}
     <h4 class="error">Väärä ylläpidon salasana, yritä uudelleen!</h4>
 {% elif session.user_exists %}
@@ -18,4 +21,4 @@
 </form>
 <!-- /register -->
 
-<!--! NEED TO ADD BUTTON FOR RETURNING -->
+{% endblock %}
