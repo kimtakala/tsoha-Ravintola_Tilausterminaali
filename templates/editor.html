@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}Ylläpito{% endblock %}
+{% block content %}
+{% if session.admin %}
+  <h2>Kaikki ruokaesineet:</h2>
+  <div class="container text-center">
+    {% for result in results: %}
+      <div class="row">
+        {% for attribute in result.values() %}
+        <div class="col">
+          {{ attribute }}
+        </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <h2 class="error">Ei käyttöoikeuksia, palaa etusivulle yläpalkista.</h2>
+{% endif %}
+{% endblock %}
