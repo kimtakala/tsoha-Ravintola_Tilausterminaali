@@ -106,10 +106,26 @@ def editor():
     sql = 'SELECT * FROM food'\
     ' LEFT JOIN food_in_category as f_i_c'\
     ' ON food.id = f_i_c.food_id'\
-    ' WHERE removed IS NOT true'\
+    ' WHERE food.removed IS NOT true'\
     ' ORDER BY f_i_c.category_id, food.name'
-    results = db.session.execute(text(sql)).fetchall()
-    return render_template("editor.html", session=session, results=results)
+    query = db.session.execute(text(sql))
+    rows = query.fetchall()
+    columns = list(query.keys())
+
+    # making the rows consist of a single list instead of a list within a list
+    # for row in rows:
+    #     temp = row
+    #     print(f'{temp = }')
+    #     row = temp.extend(row[1:])
+
+    results = {}
+    for i, column in enumerate(columns):
+        results[column] = []
+        for row in rows:
+            results[column].append(row[i])
+    
+    print(f'\n{results = }')
+    return render_template("editor.html", session=session, results=results, len=len)
 
 @app.route("/add_food_item",methods=['POST', 'GET'])
 def addfooditem():
