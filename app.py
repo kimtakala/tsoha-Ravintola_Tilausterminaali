@@ -73,8 +73,8 @@ def register():
             sql = 'INSERT INTO users (admin, username, passwordhash) VALUES'\
                   ' (:admin, :username, :password)'
             admin = session['admin']
-            result = db.session.execute(text(sql),{"admin":admin,
-                                                   "username":username, "password":password})
+            db.session.execute(text(sql),{"admin":admin,
+                                        "username":username, "password":password})
             db.session.commit()
             session['registration_successful'] = True
             return redirect("/")
@@ -114,6 +114,14 @@ def editor():
 @app.route("/add_food_item",methods=['POST', 'GET'])
 def addfooditem():
     '''Function for adding food items.'''
+    print(f'\n{request.form}\n')
+    name = request.form["item_name"]
+    price = request.form["item_price"]
+    sql = 'INSERT INTO food (name, price) VALUES'\
+            ' (:name, :price)'
+    db.session.execute(text(sql),{"price":price, "name":name})
+    db.session.commit()
+
     print('"added food item to database"')
     return redirect("/editor")
 
