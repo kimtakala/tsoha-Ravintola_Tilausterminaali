@@ -100,7 +100,7 @@ def selectionmenu():
 
     return render_template("menu.html", session=session, results=results)
 
-@app.route("/editor",methods=['POST'])
+@app.route("/editor",methods=['POST', 'GET'])
 def editor():
     '''Function for admin editor page.'''
     sql = 'SELECT * FROM food'\
@@ -110,6 +110,12 @@ def editor():
     ' ORDER BY f_i_c.category_id, food.name'
     results = db.session.execute(text(sql)).fetchall()
     return render_template("editor.html", session=session, results=results)
+
+@app.route("/add_food_item",methods=['POST', 'GET'])
+def addfooditem():
+    '''Function for adding food items.'''
+    print('"added food item to database"')
+    return redirect("/editor")
 
 @app.route("/logout")
 def logout():
