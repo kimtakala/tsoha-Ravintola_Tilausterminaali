@@ -15,7 +15,7 @@ def index():
     '''Function for index page.'''
     return render_template("index.html", session=session)
 
-@app.route("/login",methods=["POST"])
+@app.route("/login", methods=["POST"])
 def login():
     '''Function for logging in.'''
     username = request.form["username"]
@@ -36,14 +36,14 @@ def login():
             session['incorrect_values'] = True
     return redirect("/")
 
-@app.route("/registration",methods=['POST', 'GET'])
+@app.route("/registration", methods=['POST', 'GET'])
 def registration():
     '''Function for registration page.'''
     return render_template("registration.html", session=session)
 
     #! need to add check for not logged in
 
-@app.route("/register",methods=["POST"])
+@app.route("/register", methods=["POST"])
 def register():
     '''Function for registration.'''
     username = request.form["username"]
@@ -81,12 +81,12 @@ def register():
 
     return redirect("/registration")
 
-@app.route("/menu",methods=['POST'])
+@app.route("/menu", methods=['POST'])
 def mainmenu():
     '''Function for menu page.'''
     return render_template("mainmenu.html", session=session)
 
-@app.route("/menu/selection",methods=['POST'])
+@app.route("/menu/selection", methods=['POST'])
 def selectionmenu():
     'Function for menu page.'
     menu_type = request.form["menu_type"]
@@ -100,7 +100,7 @@ def selectionmenu():
 
     return render_template("menu.html", session=session, results=results)
 
-@app.route("/editor",methods=['POST', 'GET'])
+@app.route("/editor", methods=['POST', 'GET'])
 def editor():
     '''Function for admin editor page.'''
     sql = 'SELECT food.id, food.name, food.price, cat.name as category_name'\
@@ -116,10 +116,9 @@ def editor():
     columns = list(query.keys())
     return render_template("editor.html", session=session, results=results, columns=columns)
 
-@app.route("/add_food_item",methods=['POST', 'GET'])
+@app.route("/add_food_item", methods=['POST', 'GET'])
 def addfooditem():
     '''Function for adding food items.'''
-    print(f'\n{request.form}\n')
     name = request.form["item_name"]
     price = request.form["item_price"].replace(",", ".")
     sql = 'INSERT INTO food (name, price) VALUES'\
@@ -127,7 +126,27 @@ def addfooditem():
     db.session.execute(text(sql),{"price":price, "name":name})
     db.session.commit()
 
-    print('"added food item to database"')
+    return redirect("/editor")
+
+@app.route("/category_editor", methods=['POST', 'GET'])
+def category_editor():
+    '''Function for admin category editor page.'''
+    sql = 'SELECT * FROM categories'
+    query = db.session.execute(text(sql))
+    results = query.fetchall()
+    columns = list(query.keys())
+    return render_template("category_editor.html", session=session, results=results,
+                           columns=columns)
+
+@app.route("/add_category", methods=['POST', 'GET'])
+def add_category():
+    '''Function for adding categories'''
+    name = request.form["category_name"]
+    sql = 'INSERT INTO categories (name) VALUES'\
+        ' (:name)'
+    db.session.execute(text(sql),{"name":name})
+    db.session.commit()
+
     return redirect("/editor")
 
 @app.route("/logout")
