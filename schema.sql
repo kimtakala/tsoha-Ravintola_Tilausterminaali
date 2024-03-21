@@ -429,7 +429,8 @@ ALTER TABLE ONLY public.orders
     ADD CONSTRAINT orders_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
+INSERT INTO public.categories (name) VALUES ('food'), ('snacks'), ('drinks');
+
 --
 -- PostgreSQL database dump complete
 --
-
