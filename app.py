@@ -122,9 +122,26 @@ def addfooditem():
     name = request.form["item_name"]
     price = request.form["item_price"].replace(",", ".")
     sql = 'INSERT INTO food (name, price) VALUES'\
-            ' (:name, :price)'
-    db.session.execute(text(sql),{"price":price, "name":name})
+            ' (:name, :price) returning id'
+    food_id = db.session.execute(text(sql),{"price":price, "name":name}).fetchone()[0]
     db.session.commit()
+
+    food_category = request.form["food_type_selection"]
+    category_id = 0
+    if food_category == "food":
+        category_id = 1
+    elif food_category == "snacks":
+        category_id = 2
+    elif food_category == "drinks":
+        category_id = 3
+
+    if category_id:
+        sql = 'INSERT INTO food_in_category (food_id, category_id) VALUES'\
+            ' (:food_id, :category_id)'
+        db.session.execute(text(sql),{"food_id":food_id, "category_id":category_id})
+        db.session.commit()
+    else:
+        print(f'\n{food_category = } unrecognised!\n')
 
     return redirect("/editor")
 
@@ -147,7 +164,7 @@ def add_category():
     db.session.execute(text(sql),{"name":name})
     db.session.commit()
 
-    return redirect("/editor")
+    return redirect("/category_editor")
 
 @app.route("/logout")
 def logout():
