@@ -90,15 +90,28 @@ def mainmenu():
 def selectionmenu():
     'Function for menu page.'
     menu_type = request.form["menu_type"]
-    sql = 'SELECT * FROM food'\
+    sql = 'SELECT food.id, INITCAP(food.name) as nimi, food.price as hinta FROM food'\
     ' INNER JOIN food_in_category AS f_i_c'\
     ' ON food.id = f_i_c.food_id'\
     ' INNER JOIN categories AS cat'\
     ' ON f_i_c.category_id = cat.id'\
-    ' WHERE cat.name = :menu_type'
-    results = db.session.execute(text(sql), {"menu_type":menu_type}).fetchall()
+    ' WHERE cat.name = :menu_type AND food.removed IS NOT true'
+    query = db.session.execute(text(sql), {"menu_type":menu_type})
+    results = query.fetchall()
+    columns = [col.capitalize() if col != 'id' else col for col in list(query.keys())]
+    return render_template("menu.html", session=session, results=results, columns=columns)
 
-    return render_template("menu.html", session=session, results=results)
+@app.route("/basket", methods=['POST'])
+def basket():
+    'Function for basket.'
+    session.setdefault('basket', {})
+    for item_id, amount in request.form.items():
+        amount = int(amount)
+        if amount > 0:
+            session['basket'][item_id] = session['basket'].get(item_id, 0) + amount
+    session.modified = True
+    print(session['basket'])
+    return redirect("/menu")
 
 @app.route("/editor", methods=['POST', 'GET'])
 def editor():
@@ -182,9 +195,6 @@ def removefooditem():
     except ValueError:
         session['error'] = "Item id needs to be an integer!"
     return redirect("/editor")
-
-    #! incorrect integer ei toimi aina koska se ei tarkista että oliko väärä integer jo poistettu, sillä jos se oli jo poistettu update ei failaa, vaikka se onkin jo poistettu, koska se ei silti ole unavailable id.
-    #* Good enough?
 
 @app.route("/logout")
 def logout():

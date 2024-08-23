@@ -1,8 +1,54 @@
 {% extends "layout.html" %}
-{% block title %}Ruokavalikko{% endblock %}
+{% block title %}menu_alavalikko{% endblock %}
 {% block content %}
-  {% if session.menu_type == 'food' %}
-  {% elif session.menu_type == 'snacks' %}
-  {% elif session.menu_type == 'drinks' %}
-  {% endif %}
+
+{% if session.menu_type == 'food' %}
+<h2>Valitse pääruoka</h2>
+{% elif session.menu_type == 'snacks' %}
+<h2>Valitse lisuke</h2>
+{% elif session.menu_type == 'drinks' %}
+<h2>Valitse juoma</h2>
+{% endif %}
+
+{% if results %}
+<form method="POST" action="/basket">
+  <table class="table">
+    <thead>
+      <tr>
+        {% for col in columns %}
+        {% if col != 'id' %}
+        <th scope="col">{{ col }}</th>
+        {% endif %}
+        {% endfor %}
+        <th scope="col">Kappalemäärä</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in results %}
+      <tr>
+        {% for col in columns %}
+        {% if col != 'id' %}
+        <td>{{ row[col|lower] }}</td>
+        {% endif %}
+        {% endfor %}
+        <td>
+          <div class="input-group">
+            <input type="number" class="form-control" name="{{ row.id }}" value="0" min="0" required>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td colspan="{{ columns|length + 1 }}">
+          <button type="submit" class="btn btn-primary">Lisää Ostoskoriin</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+
+{% else %}
+<h5>Ei tuotteita tietokannassa</h5>
+{% endif %}
+
 {% endblock %}
