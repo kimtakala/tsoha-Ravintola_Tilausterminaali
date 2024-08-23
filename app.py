@@ -81,7 +81,7 @@ def register():
 
     return redirect("/registration")
 
-@app.route("/menu", methods=['POST'])
+@app.route("/menu", methods=['POST', 'GET'])
 def mainmenu():
     '''Function for menu page.'''
     return render_template("mainmenu.html", session=session)
@@ -165,6 +165,26 @@ def add_category():
     db.session.commit()
 
     return redirect("/category_editor")
+
+@app.route("/remove_food_item", methods=['POST'])
+def removefooditem():
+    '''Function for removing food items.'''
+    item_id = request.form["item_id"]
+    try:
+        item_id = int(item_id)
+        sql = 'UPDATE food SET removed = true'\
+                ' WHERE id = (:item_id);'
+        result = db.session.execute(text(sql),{"item_id":item_id})
+        if result.rowcount == 0:
+            session['error'] = "Incorrect item id!"
+        else:
+            db.session.commit()
+    except ValueError:
+        session['error'] = "Item id needs to be an integer!"
+    return redirect("/editor")
+
+    #! incorrect integer ei toimi aina koska se ei tarkista että oliko väärä integer jo poistettu, sillä jos se oli jo poistettu update ei failaa, vaikka se onkin jo poistettu, koska se ei silti ole unavailable id.
+    #* Good enough?
 
 @app.route("/logout")
 def logout():

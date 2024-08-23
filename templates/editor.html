@@ -4,7 +4,7 @@
 
 {% if session.admin %}
 
-<h2>Kaikki tuotteet:</h2>
+<h2>Tuotteet:</h2>
 
 {% if results %}
 <table class="table">
@@ -82,7 +82,8 @@
                     aria-describedby="item_price_help" required>
                 <span class="input-group-text">€</span>
             </div>
-            <div id="item_price_help" class="form-text">Kirjoita tuotteen hinta käyttäen pilkkua tai pistettä.
+            <div id="item_price_help" class="form-text">Kirjoita tuotteen hinta käyttäen pilkkua tai
+                pistettä.
                 Esim: 12,95</div>
         </div>
 
@@ -91,9 +92,65 @@
     </form>
 </div>
 
+<!-- remove_food_item section -->
+<h2>Poista tuotteita alla:</h2>
+
+<div class="container-sm">
+    <form action="/remove_food_item" method="POST" id="removeForm">
+        <div class="col-5">
+            <label class="mb-2" for="item_id">Tuote id:</label>
+            <div class="input-group" id="item_id">
+                <input type="number" class="form-control" name="item_id"
+                    aria-describedby="item_id_help" required>
+            </div>
+            <div id="item_id_help" class="form-text">Syötä tuotteen id</div>
+        </div>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#areyousure">
+            Poista
+        </button>
+    </form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="areyousure" tabindex="-1" aria-labelledby="areyousureLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="areyousureLabel">Oletko varma?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Oletko varma että haluat poistaa tuotteen?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Poistu</button>
+                <button type="button" class="btn btn-primary"
+                    onclick="document.getElementById('removeForm').submit();">Poista</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('removeForm').addEventListener('keypress', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            var modal = new bootstrap.Modal(document.getElementById('areyousure'));
+            modal.show();
+        }
+    });
+</script>
+
 {% else %}
 
 <h2 class="error">Ei käyttöoikeuksia, palaa etusivulle yläpalkista.</h2>
 
 {% endif %}
+
 {% endblock %}
