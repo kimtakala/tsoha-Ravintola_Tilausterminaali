@@ -1,0 +1,39 @@
+{% if items_in_basket %}
+<form method="POST" action="/basket">
+    <table class="table">
+        <thead>
+            <h2>Ostoskori</h2>
+            <tr>
+                {% for col in columns %}
+                {% if col != 'id' %}
+                <th scope="col">{{ col }}</th>
+                {% endif %}
+                {% endfor %}
+                <th scope="col">Kappalemäärä</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in results %}
+            <tr>
+                {% for col in columns %}
+                {% if col != 'id' %}
+                <td>{{ row[col|lower] }}</td>
+                {% endif %}
+                {% endfor %}
+                <td>
+                    <div class="input-group">
+                        <input type="number" class="form-control" name="{{ row.id }}" value="0"
+                            min="0" required>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="{{ columns|length + 1 }}">
+                    <button type="submit" class="btn btn-primary">Lisää Ostoskoriin</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+{% endif %}

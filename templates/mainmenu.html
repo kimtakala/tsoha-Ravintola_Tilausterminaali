@@ -1,29 +1,31 @@
 {% extends "layout.html" %}
 {% block title %}Päävalikko{% endblock %}
 {% block content %}
-  {% if session.logged_in %}
-    {% if not session.admin %}
-        <h2>Mitä saisi olla?</h2>
-    {% elif session.admin %}
-        <h2>Minkä kategorian ruokaesineitä haluat hallita?</h2>
-    {% endif %}
-    
-    <p>Valitse vaihtoehdoista:</p>
-    <br>
-    <form action="/menu/selection" method="POST">
+{% if session.logged_in %}
+{% if not session.admin %}
+<h2>Mitä saisi olla?</h2>
+{% elif session.admin %}
+<h2>Minkä kategorian ruokaesineitä haluat hallita?</h2>
+{% endif %}
 
-      <!-- foodmenu -->
-      <button name="menu_type" value="food" type="submit">Ruokavalikko</button>
+<p>Valitse vaihtoehdoista:</p>
+<br>
+<form action="/menu/selection" method="POST">
 
-      <!-- snacksmenu -->
-      <button name="menu_type" value="snacks" type="submit">Snacksvalikko</button>
+  <!-- foodmenu -->
+  <button name="menu_type" value="food" type="submit">Ruokavalikko</button>
 
-      <!-- drinksmenu -->
-      <button name="menu_type" value="drinks" type="submit">Juomavalikko</button>
-      
-    </form>
-  
-  {% else %}
-    <h2 class="error">Ette ole kirjautunut sisään, palaa etusivulle yläpalkista.</h2>
-  {% endif %}
+  <!-- snacksmenu -->
+  <button name="menu_type" value="snacks" type="submit">Snacksvalikko</button>
+
+  <!-- drinksmenu -->
+  <button name="menu_type" value="drinks" type="submit">Juomavalikko</button>
+
+</form>
+
+{% include "basket.html" %}
+
+{% else %}
+<h2 class="error">Ette ole kirjautunut sisään, palaa etusivulle yläpalkista.</h2>
+{% endif %}
 {% endblock %}

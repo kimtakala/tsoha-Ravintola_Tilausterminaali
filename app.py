@@ -84,7 +84,26 @@ def register():
 @app.route("/menu", methods=['POST', 'GET'])
 def mainmenu():
     '''Function for menu page.'''
-    return render_template("mainmenu.html", session=session)
+    basket_k_v = list(session['basket'].items())
+    sql = 'SELECT food.id, INITCAP(food.name) as nimi, food.price as hinta, cat.id FROM food'\
+    ' INNER JOIN food_in_category AS f_i_c'\
+    ' ON food.id = f_i_c.food_id'\
+    ' INNER JOIN categories AS cat'\
+    ' ON f_i_c.category_id = cat.id'\
+    ' WHERE food.id = ANY((:keys)::int[])'\
+    ' ORDER BY cat.id, food.price DESC'
+    query = db.session.execute(text(sql), {"keys":[i[0] for i in basket_k_v]})
+    items_in_basket = query.fetchall() # items_in_basket = [(14, 'Snack', Decimal('5.00'), 2), ()]
+    thebasket = []
+    for row in items_in_basket:
+        thebasket.append(dicti:={})
+        dicti['food.id']=row[0]
+        dicti['food.name']=row[1]
+        dicti['food.price']=float(row[2])
+        dicti['category.id']=row[3]
+        print(f'{dicti = }')
+    print(f'{thebasket = }')
+    return render_template("mainmenu.html", session=session, items_in_basket=items_in_basket)
 
 @app.route("/menu/selection", methods=['POST'])
 def selectionmenu():
